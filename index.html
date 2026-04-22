@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="/src/assets/cuidados-de-saude.png" type="image/x-icon" />
+  <link rel="stylesheet" href="/src/css/splash.css" />
+  <title>Calculadora de IMC</title>
+</head>
+<body>
+
+  <div id="transition-overlay" aria-hidden="true"></div>
+
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+  <div class="orb orb-3" aria-hidden="true"></div>
+
+  <main>
+    <article class="splash-card">
+      <span class="splash-icon" aria-hidden="true"><img src="/src/assets/cuidados-de-saude-128.png" alt="Imagem representativa de uma mão segurando um coração."></span>
+
+      <div class="badge" aria-label="Gratuito e sem cadastro">Gratuito &amp; Offline</div>
+
+      <h1><span>Sinal Saúde</span><br></h1>
+
+      <p class="subtitle">
+        O guia básico para sua prevenção de utilidade pública, transformando dados técnicos em informações que ajudem na tomada de decisão do dia a dia.
+      </p>
+
+      <div class="stats" role="list" aria-label="Destaques da ferramenta">
+        <div class="stat" role="listitem">
+          <span class="stat-value">6</span>
+          <span class="stat-label">Categorias</span>
+        </div>
+        <div class="stat" role="listitem">
+          <span class="stat-value">OMS</span>
+          <span class="stat-label">Critérios</span>
+        </div>
+        <div class="stat" role="listitem">
+          <span class="stat-value">0</span>
+          <span class="stat-label">Cadastros</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="btn-start" data-href="calculadora-imc.html">
+        Começar agora →
+      </button>
+
+      <footer class="splash-footer">
+        <p>Informações de caráter educativo. Não substitui consulta médica.</p>
+      </footer>
+    </article>
+  </main>
+
+  <section class="emergency-section" aria-label="Acesso rápido a primeiros socorros">
+    <div class="emergency-card">
+      <div class="emergency-card-header">
+        <div class="em-icon-wrap" aria-hidden="true">🚨</div>
+        <div>
+          <div class="em-card-title">Guia de Primeiros Socorros</div>
+          <div class="em-card-sub">Acesso offline · Sem cadastro · Pode salvar vidas</div>
+        </div>
+      </div>
+
+      <div class="em-protocols" role="list" aria-label="Protocolos disponíveis">
+        <div class="em-protocol-tag" role="listitem">
+          <span class="tag-dot tag-dot--red" aria-hidden="true"></span>
+          🆘 Manobra de Heimlich
+        </div>
+        <div class="em-protocol-tag" role="listitem">
+          <span class="tag-dot tag-dot--blue" aria-hidden="true"></span>
+          🧊 Protocolo R.I.C.E.
+        </div>
+        <div class="em-protocol-tag" role="listitem">
+          <span class="tag-dot tag-dot--orange" aria-hidden="true"></span>
+          🔥 Queimaduras (3 graus)
+        </div>
+        <div class="em-protocol-tag" role="listitem">
+          <span class="tag-dot tag-dot--purple" aria-hidden="true"></span>
+          ❤️ RCP básico
+        </div>
+      </div>
+
+      <button class="btn-emergency" data-href="src/html/primeiros-socorros.html">
+        Acessar guia de emergência →
+      </button>
+    </div>
+  </section>
+
+  <script src="/src/js/splash.js" defer></script>
+</body>
+</html>

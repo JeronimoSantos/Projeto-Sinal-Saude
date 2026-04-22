@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Calcule sua Relação Cintura-Quadril (RCQ) e avalie seu risco cardiovascular. Um indicador clínico mais preciso que o IMC para distribuição de gordura corporal." />
+  <meta name="robots" content="index, follow" />
+  <link rel="icon" href="/src/assets/cuidados-de-saude.png" type="image/x-icon" />
+  <link rel="stylesheet" href="/src/css/calculadora-rcq.css" />
+  <title>Calculadora de RCQ – Relação Cintura-Quadril</title>
+</head>
+<body>
+
+<div id="transition-overlay" aria-hidden="true"></div>
+<div class="orb orb-1" aria-hidden="true"></div>
+<div class="orb orb-2" aria-hidden="true"></div>
+
+<main>
+  <article class="card">
+
+    <header>
+      <span class="icon" aria-hidden="true">📐</span>
+      <h1>Relação Cintura-Quadril</h1>
+      <p>Indicador clínico de risco cardiovascular</p>
+    </header>
+
+    <div class="info-badge" role="note">
+      <span class="badge-icon" aria-hidden="true">💡</span>
+      <span>
+        <strong>Por que além do IMC?</strong> O IMC não distingue massa muscular de gordura.
+        O RCQ revela onde a gordura está concentrada — e gordura abdominal é o principal fator de risco cardiovascular.
+      </span>
+    </div>
+
+    <form>
+      <div class="field">
+        <label>Sexo biológico</label>
+        <div class="sex-grid" role="group" aria-label="Selecione o sexo biológico">
+          <label class="sex-option">
+            <input type="radio" name="sexo" value="M" checked />
+            <span>♂ Masculino</span>
+          </label>
+          <label class="sex-option">
+            <input type="radio" name="sexo" value="F" />
+            <span>♀ Feminino</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="anatomy-hint" aria-hidden="true">
+        <div class="hint-item">
+          <strong>📍 Cintura</strong>
+          Ponto mais estreito do tronco, acima do umbigo
+        </div>
+        <div class="hint-item">
+          <strong>📍 Quadril</strong>
+          Ponto mais largo da região glútea
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="cintura">Circunferência da cintura</label>
+        <div class="input-wrapper">
+          <input
+            type="number"
+            id="cintura"
+            name="cintura"
+            placeholder="Ex: 80"
+            min="40"
+            max="200"
+            step="0.1"
+            required
+            aria-describedby="cintura-unit"
+          />
+          <span class="unit" id="cintura-unit" aria-label="centímetros">cm</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="quadril">Circunferência do quadril</label>
+        <div class="input-wrapper">
+          <input
+            type="number"
+            id="quadril"
+            name="quadril"
+            placeholder="Ex: 96"
+            min="40"
+            max="250"
+            step="0.1"
+            required
+            aria-describedby="quadril-unit"
+          />
+          <span class="unit" id="quadril-unit" aria-label="centímetros">cm</span>
+        </div>
+      </div>
+
+      <button type="submit">Calcular RCQ</button>
+    </form>
+
+    <section class="result" id="result" aria-live="polite" aria-atomic="true">
+      <div class="result-hero" id="result-hero">
+        <div class="rcq-value" id="result-value"></div>
+        <div class="rcq-label" id="result-label"></div>
+        <div class="rcq-sub"   id="result-sub"></div>
+
+        <div class="risk-bar-wrapper">
+          <div class="risk-bar-track" id="risk-track">
+            <div class="risk-bar-fill"   id="risk-fill"></div>
+            <div class="risk-bar-marker" id="risk-marker"></div>
+          </div>
+          <div class="risk-bar-labels">
+            <span>Baixo risco</span>
+            <span>Moderado</span>
+            <span>Alto risco</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-value" id="metric-cintura"></div>
+          <div class="metric-label">Cintura (cm)</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value" id="metric-quadril"></div>
+          <div class="metric-label">Quadril (cm)</div>
+        </div>
+      </div>
+
+      <p class="tip-box" id="result-tip"></p>
+    </section>
+
+    <section class="reference" aria-label="Tabela de referência RCQ por sexo (OMS)">
+      <div class="reference-header">
+        <h2 class="reference-title">Referência OMS</h2>
+        <div class="sex-tabs" role="group" aria-label="Filtrar tabela por sexo">
+          <button class="sex-tab active" id="tab-M" data-sex="M" type="button">♂ Masc.</button>
+          <button class="sex-tab"        id="tab-F" data-sex="F" type="button">♀ Fem.</button>
+        </div>
+      </div>
+
+      <div id="table-M">
+        <div class="ref-row" id="ref-M-baixo">
+          <span class="ref-left">
+            <span class="ref-dot ref-dot--baixo" aria-hidden="true"></span>
+            Baixo risco
+          </span>
+          <span class="ref-right">
+            <span class="ref-range">&lt; 0,90</span>
+            <span class="ref-risk pill-baixo">Baixo</span>
+          </span>
+        </div>
+        <div class="ref-row" id="ref-M-moderado">
+          <span class="ref-left">
+            <span class="ref-dot ref-dot--moderado" aria-hidden="true"></span>
+            Risco moderado
+          </span>
+          <span class="ref-right">
+            <span class="ref-range">0,90 – 0,99</span>
+            <span class="ref-risk pill-moderado">Moderado</span>
+          </span>
+        </div>
+        <div class="ref-row" id="ref-M-alto">
+          <span class="ref-left">
+            <span class="ref-dot ref-dot--alto" aria-hidden="true"></span>
+            Alto risco
+          </span>
+          <span class="ref-right">
+            <span class="ref-range">≥ 1,00</span>
+            <span class="ref-risk pill-alto">Alto</span>
+          </span>
+        </div>
+      </div>
+
+      <div id="table-F">
+        <div class="ref-row" id="ref-F-baixo">
+          <span class="ref-left">
+            <span class="ref-dot ref-dot--baixo" aria-hidden="true"></span>
+            Baixo risco
+          </span>
+          <span class="ref-right">
+            <span class="ref-range">&lt; 0,80</span>
+            <span class="ref-risk pill-baixo">Baixo</span>
+          </span>
+        </div>
+        <div class="ref-row" id="ref-F-moderado">
+          <span class="ref-left">
+            <span class="ref-dot ref-dot--moderado" aria-hidden="true"></span>
+            Risco moderado
+          </span>
+          <span class="ref-right">
+            <span class="ref-range">0,80 – 0,85</span>
+            <span class="ref-risk pill-moderado">Moderado</span>
+          </span>
+        </div>
+        <div class="ref-row" id="ref-F-alto">
+          <span class="ref-left">
+            <span class="ref-dot ref-dot--alto" aria-hidden="true"></span>
+            Alto risco
+          </span>
+          <span class="ref-right">
+            <span class="ref-range">&gt; 0,85</span>
+            <span class="ref-risk pill-alto">Alto</span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <nav class="nav-links" aria-label="Outras calculadoras">
+      <a class="back-link" data-href="calculadora-imc.html"        role="button" tabindex="0">⚖️ Calculadora de IMC</a>
+      <a class="back-link" data-href="calculadora-hidratacao.html" role="button" tabindex="0">💧 Calculadora de Hidratação</a>
+      <a class="back-link" data-href="calculadora-tmb.html"        role="button" tabindex="0">🔥 Calculadora de TMB</a>
+    </nav>
+
+    <footer>
+      <p>Classificação baseada nos critérios da Organização Mundial da Saúde (OMS). Não substitui avaliação médica.</p>
+    </footer>
+
+  </article>
+</main>
+
+<script src="/src/js/calculadora-rcq.js" defer></script>
+</body>
+</html>

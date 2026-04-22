@@ -1,0 +1,220 @@
+name: accessibility-check
+version: "1.0"
+description: >
+  Workflow que valida a acessibilidade de todos os arquivos HTML do projeto,
+  verificando conformidade com as diretrizes WCAG 2.1 nível AA e boas práticas
+  de HTML semântico.
+
+# ── Gatilhos ──────────────────────────────────────────────────────────────────
+triggers:
+  - event: manual
+    command: "@accessibility-check"
+
+  - event: file_modified
+    pattern: "*.html"
+    action: run
+
+  - event: pull_request_opened
+    action: run
+
+# ── Arquivos alvo ─────────────────────────────────────────────────────────────
+inputs:
+  files:
+    - splash.html
+    - calculadora-imc.html
+    - calculadora-hidratacao.html
+    - calculadora-rcq.html
+    - calculadora-tmb.html
+    - primeiros-socorros.html
+  exclude:
+    - "node_modules/**"
+    - "*.min.html"
+
+# ── Etapas do workflow ────────────────────────────────────────────────────────
+steps:
+
+  - id: estrutura-semantica
+    name: "1. Estrutura semântica"
+    description: Verifica o uso correto de elementos semânticos HTML5
+    checks:
+      - rule: has_lang_attribute
+        description: "Tag <html> deve ter atributo lang definido (ex: lang='pt-BR')"
+        severity: error
+
+      - rule: has_single_h1
+        description: "Cada página deve ter exatamente um <h1>"
+        severity: error
+
+      - rule: heading_hierarchy
+        description: "Níveis de heading não devem pular (h1 → h2 → h3)"
+        severity: warning
+
+      - rule: uses_landmark_elements
+        description: "Página deve conter <main>, <header>, <nav> e/ou <footer> quando aplicável"
+        severity: warning
+
+      - rule: no_div_for_semantic
+        description: "<div> não deve ser usado onde <section>, <article>, <aside> seria mais adequado"
+        severity: warning
+
+  - id: formularios
+    name: "2. Formulários e entradas"
+    description: Valida acessibilidade de inputs, labels e grupos de controle
+    checks:
+      - rule: labels_linked_to_inputs
+        description: "Todo <input> deve ter <label for='id'> correspondente ou aria-label"
+        severity: error
+
+      - rule: required_fields_indicated
+        description: "Campos obrigatórios devem ter atributo 'required' e indicação visual"
+        severity: error
+
+      - rule: input_has_type
+        description: "Todo <input> deve declarar 'type' explicitamente"
+        severity: warning
+
+      - rule: radio_group_has_fieldset
+        description: "Grupos de radio buttons devem estar dentro de <fieldset> com <legend>, ou ter role='group' com aria-label"
+        severity: warning
+
+      - rule: button_has_text
+        description: "Botões devem ter texto descritivo ou aria-label"
+        severity: error
+
+  - id: imagens-e-midia
+    name: "3. Imagens e mídia"
+    description: Verifica textos alternativos e elementos decorativos
+    checks:
+      - rule: images_have_alt
+        description: "Toda <img> deve ter atributo alt (vazio se decorativa)"
+        severity: error
+
+      - rule: decorative_has_aria_hidden
+        description: "Elementos puramente decorativos (ícones, emojis) devem ter aria-hidden='true'"
+        severity: warning
+
+      - rule: no_image_of_text
+        description: "Textos não devem ser representados como imagem sem alternativa"
+        severity: warning
+
+  - id: aria-e-roles
+    name: "4. ARIA e roles"
+    description: Valida uso correto de atributos ARIA e roles semânticos
+    checks:
+      - rule: live_regions_on_dynamic_content
+        description: "Áreas de resultado dinâmico devem ter aria-live='polite' e aria-atomic='true'"
+        severity: error
+
+      - rule: no_invalid_aria_roles
+        description: "Valores de role devem ser válidos pela especificação WAI-ARIA"
+        severity: error
+
+      - rule: aria_required_children
+        description: "Elements com role composto (ex: tablist) devem conter os filhos obrigatórios"
+        severity: error
+
+      - rule: aria_labelledby_references_exist
+        description: "IDs referenciados por aria-labelledby e aria-describedby devem existir no DOM"
+        severity: error
+
+      - rule: interactive_has_role
+        description: "Elementos clicáveis que não são <button> ou <a> devem ter role e tabindex"
+        severity: warning
+
+  - id: navegacao-teclado
+    name: "5. Navegação por teclado"
+    description: Garante que a interface é totalmente operável sem mouse
+    checks:
+      - rule: no_positive_tabindex
+        description: "tabindex com valor positivo (>0) quebra a ordem natural de foco — use 0 ou -1"
+        severity: warning
+
+      - rule: focus_not_removed
+        description: "outline: none sem substituto de foco visível viola acessibilidade"
+        severity: error
+
+      - rule: skip_navigation_link
+        description: "Páginas longas devem ter link 'Pular para o conteúdo' como primeiro elemento focável"
+        severity: warning
+
+      - rule: interactive_elements_focusable
+        description: "Todos os controles interativos devem ser alcançáveis via Tab"
+        severity: error
+
+  - id: contraste-e-cores
+    name: "6. Contraste e cores"
+    description: Verifica razões de contraste mínimas exigidas pela WCAG 2.1 AA
+    checks:
+      - rule: text_contrast_ratio
+        description: "Texto normal deve ter contraste mínimo de 4.5:1; texto grande ≥ 3:1"
+        severity: error
+
+      - rule: ui_component_contrast
+        description: "Bordas de inputs e ícones de interface devem ter contraste ≥ 3:1 contra o fundo"
+        severity: warning
+
+      - rule: no_color_alone
+        description: "Informação não deve ser transmitida apenas por cor (ex: erro indicado só em vermelho sem ícone ou texto)"
+        severity: warning
+
+  - id: seo-e-meta
+    name: "7. SEO e metadados"
+    description: Valida tags essenciais para indexação e compartilhamento
+    checks:
+      - rule: has_title
+        description: "Toda página deve ter <title> único e descritivo"
+        severity: error
+
+      - rule: has_meta_description
+        description: "Toda página deve ter <meta name='description'> com 50–160 caracteres"
+        severity: warning
+
+      - rule: has_viewport_meta
+        description: "Deve ter <meta name='viewport' content='width=device-width, initial-scale=1'>"
+        severity: error
+
+      - rule: has_charset
+        description: "Deve declarar <meta charset='UTF-8'>"
+        severity: error
+
+      - rule: favicon_present
+        description: "Deve ter <link rel='icon'> definido"
+        severity: warning
+
+# ── Saídas do workflow ────────────────────────────────────────────────────────
+outputs:
+  - path: "reports/accessibility-report.md"
+    description: Relatório completo com todos os problemas encontrados por arquivo e severidade
+    format: markdown
+
+  - path: "reports/accessibility-summary.json"
+    description: Sumário estruturado com contagem de erros e warnings por arquivo
+    format: json
+
+# ── Formato do relatório ──────────────────────────────────────────────────────
+report:
+  group_by: file
+  sort_by: severity
+  include_passing: false
+  sections:
+    - errors_count
+    - warnings_count
+    - violations_detail
+    - recommendations
+
+  severity_levels:
+    error:
+      label: "❌ Erro"
+      description: "Viola diretriz WCAG 2.1 AA — deve ser corrigido"
+    warning:
+      label: "⚠️ Aviso"
+      description: "Boa prática recomendada — deve ser revisado"
+    info:
+      label: "ℹ️ Info"
+      description: "Sugestão de melhoria — opcional"
+
+# ── Critério de aprovação ─────────────────────────────────────────────────────
+pass_criteria:
+  max_errors: 0
+  max_warnings: 5
+  on_failure: block_merge
