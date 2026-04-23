@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "Sinal Saúde",
+    "slug": "sinal-saude",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/cuidados-de-saude.png",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "scheme": "sinalsaude",
+    "splash": {
+      "image": "./assets/cuidados-de-saude.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0f0c29"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/cuidados-de-saude128.png",
+        "backgroundColor": "#0f0c29"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "package": "com.jejedev.sinalsaude"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "eec6f26d-9123-4784-abfd-9daf1d67ed38"
+      }
+    },
+    "owner": "jejedev"
+  }
+}
